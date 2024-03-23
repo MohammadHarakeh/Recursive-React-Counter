@@ -1,16 +1,20 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
 
-const Recursion = ({ level = 0, parentCount = 0, remove }) => {
+const Recursion = ({ level = 0, parentCount = 1, remove }) => {
   const [children, setChildren] = useState([]);
-  const [count, setCount] = useState(parentCount);
+  const [count, setCount] = useState(1);
 
   useEffect(() => {
     console.log(children);
   }, [children, level]);
 
   const add = () => {
-    const child = { id: `child-${level}-${count}`, level: level + 1 };
+    const child = {
+      id: `child-${level}-${count}`,
+      level: level + 1,
+      parentCount: count,
+    };
     setChildren([...children, child]);
     setCount(count + 1);
   };
@@ -21,14 +25,14 @@ const Recursion = ({ level = 0, parentCount = 0, remove }) => {
 
   return (
     <div className="wrapper">
-      <span>{count}</span>
+      <span>{parentCount}</span>
       <button onClick={add}>+</button>
       {level > 0 && <button onClick={remove}>-</button>}
       {children.map((child) => (
         <Recursion
           key={child.id}
           level={child.level}
-          parentCount={count}
+          parentCount={child.parentCount}
           remove={() => removeChild(child.id)}
         />
       ))}
